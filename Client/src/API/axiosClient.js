@@ -2,7 +2,7 @@ import axios from "axios"
 
 const axiosClient =  axios.create({
 
-    baseURL: 'http://localhost:5000',
+    baseURL: 'https://codex-backend-ys74.onrender.com',
     
     withCredentials: true,
     headers: {
