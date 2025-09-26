@@ -13,10 +13,14 @@ const videoRouter = require('./Routes/videoRoutes')
 const contestRouter = require('./Routes/contestRouter')
 
 
+const allowedOrigins = [
+  "http://localhost:5173", // Vite dev
+  "https://codex-fronted.onrender.com" // Render frontend
+];
 
 //CORS parsing
 app.use(cors({
-    origin:'https://codex-fronted.onrender.com'
+    origin: allowedOrigins
     credentials: true
 }))
 
