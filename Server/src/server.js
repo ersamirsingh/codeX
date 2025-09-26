@@ -16,7 +16,7 @@ const contestRouter = require('./Routes/contestRouter')
 
 //CORS parsing
 app.use(cors({
-    origin: 'https://codex-fronted.onrender.com',
+    origin:'https://codex-fronted.onrender.com'
     credentials: true
 }))
 
