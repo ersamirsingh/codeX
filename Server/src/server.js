@@ -26,6 +26,11 @@ app.use(express.json())
 app.use(cookieParser())
 
 
+app.get("/", (req, res) => {
+  res.send("Backend is running! Visit /user/login or /user/check, and more");
+});
+
+
 //Route
 app.use('/user', authRouter)
 app.use('/problem', problemRouter)
