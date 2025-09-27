@@ -18,7 +18,7 @@ export default function ContestList() {
         setErrors('')
         setLoading(true)
         const { data } = await axiosClient.get("/contest");
-        console.log(data)
+        // console.log(data)
         setContests(data);
         
         // setHasFetched(true)
