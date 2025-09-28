@@ -23,7 +23,7 @@ function UpdateProblemList() {
         if(!res.data || res.data.length === 0) throw new Error('Problem not found')
 
         setProblems(res.data);
-        console.log(res.data)
+        // console.log(res.data)
           // console.log(problems)
       } catch (err) {
           // console.error("Error fetching problems:", err);
