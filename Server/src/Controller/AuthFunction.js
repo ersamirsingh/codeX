@@ -19,11 +19,9 @@ const register = async (req, res)=>{
         const {emailId, password} = req.body
 
         //is user already exists
-        let user = await User.findOne({emailId})
+        let user = await User.findOne({emailId:emailId})
         if(user)
-            return res.status(404).json({
-                message:'user already exists with this email'
-            })
+            return res.status(404).send('user already exists with this email')
 
         //Hash the password
         req.body.password = await bcrypt.hash(password, 10)
@@ -72,17 +70,17 @@ const login = async (req, res)=>{
         const {emailId, password} = req.body
 
         if(!emailId || !password)
-            throw new Error('Invalid credential- Absent_data')
+            throw new Error('Invalid credential')
 
         const user = await User.findOne({emailId})
         if(!user)
-            throw new Error('Invalid credentail- user not found')
+            throw new Error('Invalid credentail')
 
         const match = await bcrypt.compare(password, user.password)
         // console.log(match)
 
         if(!match){
-            throw new Error('Invalid credential- Match')
+            throw new Error('Invalid credential')
         }
 
         const reply = {
@@ -94,12 +92,7 @@ const login = async (req, res)=>{
 
         const token = jwt.sign({_id: user._id, emailId: emailId, role: user.role}, process.env.SECRET_KEY, {expiresIn: process.env.JWT_EXP})
 
-        res.cookie('Token', token, { 
-            httpOnly: true,      // not accessible by JS
-            secure: true,        // only send over HTTPS
-            sameSite: "None",    // required for cross-site cookies
-            maxAge: parseInt(process.env.JWT_MAX_AGE)
-        })
+        res.cookie('Token', token, { maxAge: parseInt(process.env.JWT_MAX_AGE)})
         res.status(201).json({
             user: reply,
             message: 'Login successfully'
@@ -107,7 +100,7 @@ const login = async (req, res)=>{
 
     } catch (error) {
         // console.log(error.message)
-        res.status(401).send('Error occured: '+error.message)
+        res.status(401).send(error.message)
     }
 }
 
@@ -129,7 +122,7 @@ const logout = async (req, res)=>{
         res.status(201).send('Logged out successfully')
         
     } catch (error) {
-        res.status(503).send('Error occoured '+error.message)
+        res.status(503).send(error.message)
     }
 }
 
@@ -144,7 +137,7 @@ const adminRegister = async (req, res)=>{
         const {emailId, password} = req.body
 
         if(!emailId || !password)
-            throw new Error('Email and password not Found- Admin register')
+            throw new Error('Email and password not Found')
 
         req.body.password = await bcrypt.hash(password, 10)
         // req.body.role = 'admin'
@@ -155,19 +148,13 @@ const adminRegister = async (req, res)=>{
 
         const Token = jwt.sign({_id: user._id, emailId: emailId, role: req.body.role}, process.env.SECRET_KEY, {expiresIn: process.env.JWT_EXP})
         if(!Token)
-            throw new Error('Token not found- Admin register')
+            throw new Error('Token not found')
 
-        res.cookie('Token', token, { 
-            httpOnly: true,      // not accessible by JS
-            secure: true,        // only send over HTTPS
-            sameSite: "None",    // required for cross-site cookies
-            maxAge: parseInt(process.env.JWT_MAX_AGE)
-        })
-        
+        res.cookie('Token', Token)
         res.status(201).send(user.role+' Registered successully')
 
     } catch (error) {
-        res.send('Error occured '+error.message)
+        res.send(error.message)
     }
 
 }
@@ -188,7 +175,7 @@ const deleteProfile = async (req, res)=>{
         //from Submission schema
         await Submission.deleteMany({userId})
 
-        res.status(201).send('user Deleted successfully')
+        res.status(201).send('user deleted successfully')
     } catch (error) {
         
         res.status(500).send('Internal error')
