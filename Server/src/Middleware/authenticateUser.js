@@ -6,10 +6,9 @@ const authenticateUser = async (req, res, next)=>{
 
    try {
 
-      const {Token} = req.cookies
-
-      if(!Token)
-         throw new Error('Token not Found')
+      const Token = req.cookies?.Token || req.headers.authorization?.split(" ")[1];
+      if (!Token)
+         return res.status(401).send("Unauthorized")
 
       const isBlocked = await redisClient.exists(`Token: ${Token}`)
 
@@ -27,7 +26,7 @@ const authenticateUser = async (req, res, next)=>{
       next()
 
    } catch (error) {
-      return res.status(401).send('Error occured: '+error.message)
+      return res.status(401).send(error.message)
    }
 }
 
