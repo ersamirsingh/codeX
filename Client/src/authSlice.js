@@ -94,7 +94,7 @@ const authSlice = createSlice({
         })
         .addCase(registerUser.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.payload?.message || 'Something went wrong';
+            state.error = action.payload?.response.data || 'Something went wrong';
             state.isAuthenticated = false;
             state.user = null;
         })
@@ -111,7 +111,7 @@ const authSlice = createSlice({
         })
         .addCase(loginUser.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.payload?.message || 'Something went wrong';
+            state.error = action?.payload?.response?.data || 'Something went wrong';
             state.isAuthenticated = false;
             state.user = null;
         })
@@ -126,9 +126,9 @@ const authSlice = createSlice({
             state.isAuthenticated = !!action.payload;
             state.user = action.payload;
         })
-        .addCase(checkAuth.rejected, (state, action) => {
+        .addCase(checkAuth.rejected, (state) => {
             state.loading = false;
-            state.error = action.payload?.message || 'Something went wrong';
+            state.error = null;
             state.isAuthenticated = false;
             state.user = null;
         })
@@ -146,12 +146,13 @@ const authSlice = createSlice({
         })
         .addCase(logoutUser.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.payload?.message || 'Something went wrong';
+            state.error = action.payload?.response?.message || 'Something went wrong';
             state.isAuthenticated = false;
             state.user = null;
         });
     }
 });
+
 
 
 
