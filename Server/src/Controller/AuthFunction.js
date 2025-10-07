@@ -21,17 +21,19 @@ const register = async (req, res)=>{
         //is user already exists
         let user = await User.findOne({emailId})
         if(user)
-            return res.status(404).send('user already exists with this email')
+            return res.status(404).json({
+                message:'user already exists with this email'
+            })
 
         //Hash the password
         req.body.password = await bcrypt.hash(password, 10)
         req.body.role = 'user'
 
         //User creation
-        const user = await User.create(req.body)
+        user = await User.create(req.body)
 
         if(!user)
-            throw new Error('user not created- register')
+            throw new Error('User not registered')
 
         //JWT
         const token = jwt.sign({_id: user._id, emailId: emailId, role:"user"}, process.env.SECRET_KEY, {expiresIn: process.env.JWT_EXP})
@@ -39,12 +41,7 @@ const register = async (req, res)=>{
             throw new Error('Token not generated')
         // console.log(token)
 
-        res.cookie('Token', token, { 
-            httpOnly: true,      // not accessible by JS
-            secure: true,        // only send over HTTPS
-            sameSite: "None",    // required for cross-site cookies
-            maxAge: parseInt(process.env.JWT_MAX_AGE)
-        })
+        res.cookie('Token', token, { maxAge: parseInt(process.env.JWT_MAX_AGE)})
 
         const reply = {
 
@@ -60,7 +57,7 @@ const register = async (req, res)=>{
         })
         
     } catch (error) {
-        res.status(400).send('Error occured: '+error.message)
+        res.status(400).send(error.message)
     }
 }
 
