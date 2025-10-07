@@ -18,6 +18,11 @@ const register = async (req, res)=>{
         
         const {emailId, password} = req.body
 
+        //is user already exists
+        let user = await User.findOne({emailId})
+        if(user)
+            return res.status(404).send('user already exists with this email')
+
         //Hash the password
         req.body.password = await bcrypt.hash(password, 10)
         req.body.role = 'user'
