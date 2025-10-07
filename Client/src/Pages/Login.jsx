@@ -7,8 +7,7 @@ import { loginUser } from '../authSlice';
 import { useEffect, useState } from 'react';
 
 const loginSchema = z.object({
-  emailId: z.string().email('Invalid Email'),
-  password: z.string().min(8, 'Password is too weak'),
+  emailId: z.string().email('Invalid Email')
 });
 
 function Login() {
