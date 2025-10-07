@@ -39,7 +39,14 @@ const register = async (req, res)=>{
             throw new Error('Token not generated')
         // console.log(token)
 
-        res.cookie('Token', token, { maxAge: parseInt(process.env.JWT_MAX_AGE)})
+        // res.cookie('Token', token, { maxAge: parseInt(process.env.JWT_MAX_AGE)})
+        res.cookie("Token", token, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          maxAge: parseInt(process.env.JWT_MAX_AGE)
+        });
+
 
         const reply = {
 
@@ -92,7 +99,13 @@ const login = async (req, res)=>{
 
         const token = jwt.sign({_id: user._id, emailId: emailId, role: user.role}, process.env.SECRET_KEY, {expiresIn: process.env.JWT_EXP})
 
-        res.cookie('Token', token, { maxAge: parseInt(process.env.JWT_MAX_AGE)})
+        // res.cookie('Token', token, { maxAge: parseInt(process.env.JWT_MAX_AGE)})
+        res.cookie("Token", token, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          maxAge: parseInt(process.env.JWT_MAX_AGE)
+        });
         res.status(201).json({
             user: reply,
             message: 'Login successfully'
@@ -146,7 +159,13 @@ const adminRegister = async (req, res)=>{
         if(!user)
             throw new Error('User not found')
 
-        const Token = jwt.sign({_id: user._id, emailId: emailId, role: req.body.role}, process.env.SECRET_KEY, {expiresIn: process.env.JWT_EXP})
+        // const Token = jwt.sign({_id: user._id, emailId: emailId, role: req.body.role}, process.env.SECRET_KEY, {expiresIn: process.env.JWT_EXP})
+        res.cookie("Token", token, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          maxAge: parseInt(process.env.JWT_MAX_AGE)
+        });
         if(!Token)
             throw new Error('Token not found')
 
