@@ -27,7 +27,7 @@ app.use(cookieParser())
 
 
 app.get("/", (req, res) => {
-  res.send("Backend is running! Visit /user/login or /user/check, and more");
+  res.send("Backend is running!");
 });
 
 
