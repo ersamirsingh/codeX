@@ -7,7 +7,7 @@ import { loginUser } from '../authSlice';
 import { useEffect, useState } from 'react';
 
 const loginSchema = z.object({
-  emailId: z.string().email('Invalid Email')
+  emailId: z.string().email('Invalid Email'),
   password: z.string()
 });
 
