@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 
 const loginSchema = z.object({
   emailId: z.string().email('Invalid Email')
+  password: z.string()
 });
 
 function Login() {
