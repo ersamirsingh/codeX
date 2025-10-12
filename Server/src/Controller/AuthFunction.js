@@ -81,13 +81,13 @@ const login = async (req, res)=>{
 
         const user = await User.findOne({emailId})
         if(!user)
-            throw new Error('Invalid credentail-user')
+            throw new Error('Invalid credentail')
 
         const match = await bcrypt.compare(password, user.password)
         // console.log(match)
 
         if(!match){
-            throw new Error('Invalid credential-pass')
+            throw new Error('Invalid credential')
         }
     
 
