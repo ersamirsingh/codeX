@@ -31,12 +31,12 @@ const register = async (req, res)=>{
         user = await User.create(req.body)
 
         if(!user)
-            throw new Error('User not registered')
+            return res.status(404).send('User not registered')
 
         //JWT
         const token = jwt.sign({_id: user._id, emailId: emailId, role:"user"}, process.env.SECRET_KEY, {expiresIn: process.env.JWT_EXP})
         if(!token)
-            throw new Error('Token not generated')
+            return res.status(404).send('Token not generated')
         // console.log(token)
 
         // res.cookie('Token', token, { maxAge: parseInt(process.env.JWT_MAX_AGE)})
@@ -62,7 +62,7 @@ const register = async (req, res)=>{
         })
         
     } catch (error) {
-        res.status(400).send(error.message)
+        res.status(500).send("Internal Server Error)
     }
 }
 
@@ -81,13 +81,13 @@ const login = async (req, res)=>{
 
         const user = await User.findOne({emailId})
         if(!user)
-            throw new Error('Invalid credentail')
+            return res.status(404).send('Invalid credentail')
 
         const match = await bcrypt.compare(password, user.password)
         // console.log(match)
 
         if(!match){
-            throw new Error('Invalid credential')
+            return res.status(404).send('Invalid credential')
         }
     
 
@@ -114,7 +114,7 @@ const login = async (req, res)=>{
 
     } catch (error) {
         // console.log(error.message)
-        res.status(401).send(error.message)
+        res.status(500).send(error.message)
     }
 }
 
@@ -136,7 +136,7 @@ const logout = async (req, res)=>{
         res.status(201).send('Logged out successfully')
         
     } catch (error) {
-        res.status(503).send(error.message)
+        res.status(500).send("Internal server error)
     }
 }
 
@@ -151,14 +151,14 @@ const adminRegister = async (req, res)=>{
         const {emailId, password} = req.body
 
         if(!emailId || !password)
-            throw new Error('Email and password not Found')
+            return res.status(404).send('Email and password not Found')
 
         req.body.password = await bcrypt.hash(password, 10)
         // req.body.role = 'admin'
 
         const user = await User.create(req.body)
         if(!user)
-            throw new Error('User not found')
+            return res.status(404).send('User not found')
 
         // const Token = jwt.sign({_id: user._id, emailId: emailId, role: req.body.role}, process.env.SECRET_KEY, {expiresIn: process.env.JWT_EXP})
         res.cookie("Token", token, {
@@ -174,7 +174,7 @@ const adminRegister = async (req, res)=>{
         res.status(201).send(user.role+' Registered successully')
 
     } catch (error) {
-        res.send(error.message)
+        res.status(500).send(error.message)
     }
 
 }
