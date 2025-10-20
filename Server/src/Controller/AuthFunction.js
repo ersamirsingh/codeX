@@ -136,7 +136,7 @@ const logout = async (req, res)=>{
         res.status(201).send('Logged out successfully')
         
     } catch (error) {
-        res.status(500).send("Internal server error)
+        res.status(500).send("Internal server error")
     }
 }
 
