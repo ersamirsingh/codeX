@@ -22,7 +22,9 @@ const runCode = async (req, res)=>{
 
         if(!userId || !problemId || !code || !language){
 
-            return res.status(400).json('Undefined value')
+            return res.status(400).json({
+                message:'Undefined value'
+            })
 
         }
 
@@ -54,7 +56,7 @@ const runCode = async (req, res)=>{
 
         const testResult = await submitToken(resultToken)
         if(!testResult)
-            throw new Error('testResult not present')
+            return res.status(500).send('testResult not present')
 
         let testCasesPassed = 0;
         let runtime = 0;
@@ -87,7 +89,7 @@ const runCode = async (req, res)=>{
         });
 
     } catch (error) {
-        res.status(500).send('Internal server errror: '+error)
+        res.status(500).send('Internal server errror')
     }
 }
 
@@ -134,16 +136,16 @@ const submitCode = async (req, res)=>{
         const submitResult = await submitBatch(submission)
         // console.log('Submit result: ', submitResult)
 
-            if(!submitResult)
-                throw new Error('submitResult not present')
+        if(!submitResult)
+            return res.status(500).send('submitResult not present')
 
         const resultToken = submitResult.map(value=>value.token)
         if(!resultToken)
-            throw new Error('resultToken not present')
+            return res.status(500).send('resultToken not present')
 
         const testResult = await submitToken(resultToken)
         if(!testResult)
-            throw new Error('testResult not present')
+            return res.status(500).send('testResult not present')
 
         //Now, we will update submit Result
         let testCasesPassed = 0
@@ -199,7 +201,7 @@ const submitCode = async (req, res)=>{
 
 
     } catch (error) {
-        res.status(500).send('Internal server errror: '+error)
+        res.status(500).send('Internal server errror: ')
     }
 
 }
