@@ -15,12 +15,12 @@ const authenticateAdmin = async (req, res, next)=>{
         const isBlocked = await redisClient.exists(`Token: ${Token}`)
 
         if(isBlocked)
-            throw new Error('Invalid token')
+            return res.status(401).send('Invalid token')
 
         const payload = jwt.verify(Token, process.env.SECRET_KEY)
 
         if(payload.role != 'admin'){
-            throw new Error('You are not an admin');
+            return res.status(401).send('You are not an admin');
         }
 
         req.payload = payload
@@ -33,7 +33,7 @@ const authenticateAdmin = async (req, res, next)=>{
         next()
 
     } catch (error) {
-        return res.status(401).send(error.message)
+        return res.status(500).send(error.message)
     }
 }
 

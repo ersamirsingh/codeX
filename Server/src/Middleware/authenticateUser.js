@@ -13,7 +13,7 @@ const authenticateUser = async (req, res, next)=>{
       const isBlocked = await redisClient.exists(`Token: ${Token}`)
 
       if(isBlocked)
-         throw new Error('Invalid token')
+         return res.status(401).send('Invalid token')
 
       const payload = jwt.verify(Token, process.env.SECRET_KEY)
 
@@ -26,7 +26,7 @@ const authenticateUser = async (req, res, next)=>{
       next()
 
    } catch (error) {
-      return res.status(401).send(error.message)
+      return res.status(500).send(error.message)
    }
 }
 
