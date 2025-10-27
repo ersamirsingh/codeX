@@ -103,7 +103,8 @@ const solveDoubt = async(req , res)=>{
     }
     catch(err){
         res.status(500).json({
-            message: "Internal server error"
+            message: "Internal server error",
+            error: err.message
         });
     }
 }
