@@ -41,17 +41,17 @@ const createProblem = async (req, res)=>{
             const submitResult = await submitBatch(submission)
             // console.log('submitResult', submitResult)
             if(!submitResult)
-                throw new Error('submitResult not present')
+                return res.status(400).send('submitResult not present')
 
             //We got Token after Submitting the Batch - Token
             const resultToken = submitResult.map(value=>value.token)
             if(!resultToken)
-                throw new Error('resultToken not present')
+                return res.status(400).send('resultToken not present')
 
             //Again we submit the Token for get the status_id
             const testResult = await submitToken(resultToken)
             if(!testResult)
-                throw new Error('testResult not present')
+                return res.status(400).send('testResult not present')
 
             // console.log(testResult)
             for(const test of testResult){
@@ -79,10 +79,10 @@ const createProblem = async (req, res)=>{
 
         // console.log(problem)
 
-        res.status(201).send('Problem saved successfully')
+        res.status(200).send('Problem saved successfully')
 
     } catch (error) {
-        res.status(400).send('Error occured: '+error.message)
+        res.status(500).send(error.message)
     }
 
 }
@@ -128,17 +128,17 @@ const updateProblem = async (req, res)=>{
 
             const submitResult = await submitBatch(submission)
             if(!submitResult)
-                throw new Error('submitResult not present')
+                return res.status(400).send('submitResult not present')
             // console.log(submitResult)
 
             const resultToken = submitResult.map(value=>value.token)
             if(!resultToken)
-                throw new Error('resultToken not present')
+                return res.status(400).send('resultToken not present')
             // console.log(resultToken)
 
             const testResult = await submitToken(resultToken)
             if(!testResult)
-                throw new Error('testResult not present')
+                return res.status(400).send('testResult not present')
             // console.log(testResult)
 
             for(const test of testResult){
@@ -150,7 +150,7 @@ const updateProblem = async (req, res)=>{
 
         const newProblem = await Problem.findByIdAndUpdate(id, {...req.body}, {runValidators: true, new:true})
         if(!newProblem)
-            res.status(404).send('Problem not found')
+            return res.status(404).send('Problem not found')
 
         res.status(200).send(newProblem)
 
@@ -179,7 +179,7 @@ const deleteProblem = async (req, res)=>{
         res.status(200).send('Problem deleted successfully')
     }
     catch(err){
-        res.status(400).send('Error occured: '+err)
+        res.status(500).send('Error occured: '+err)
     }
 }
 
@@ -194,7 +194,7 @@ const getProblemById = async (req, res)=>{
 
     try{
         if(!id)
-            return res.status(400).send('Missing ID')
+        return res.status(400).send('Missing ID')
 
 
         // const getProblem =  await Problem.findById(id)
@@ -241,7 +241,7 @@ const getAllProblem = async (req, res)=>{
         res.status(200).send(getProblem)
 
     } catch (error) {
-        res.status(200).send(error.message)
+        res.status(500).send(error.message)
     }
 }
 
@@ -265,7 +265,7 @@ const solvedProblemByUser = async (req, res)=>{
 
     } catch (error) {
         
-        req.status(500).send('Error occured: '+error)
+        res.status(500).send(error.message)
     }
 }
 
@@ -286,7 +286,7 @@ const submittedProblem = async (req, res)=>{
 
         res.status(200).send(ans)
     } catch (error) {
-        res.status(500).send('Internal server Error')
+        res.status(500).send(error.message)
     }
 }
 
