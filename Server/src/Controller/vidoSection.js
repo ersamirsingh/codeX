@@ -21,7 +21,9 @@ const generateUploadSignature = async (req, res) => {
     // Verify problem exists
     const problem = await Problem.findById(problemId);
     if (!problem) {
-      return res.status(404).json({ error: 'Problem not found' });
+      return res.status(404).json({ 
+        error: 'Problem not found' 
+      });
     }
 
     // Generate unique public_id for the video
@@ -40,7 +42,7 @@ const generateUploadSignature = async (req, res) => {
       process.env.CLOUDINARY_API_SECRET
     );
 
-    res.json({
+    res.status(200).json({
       signature,
       timestamp,
       public_id: publicId,
@@ -50,7 +52,7 @@ const generateUploadSignature = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error generating upload signature:', error);
+    // console.error('Error generating upload signature:', error);
     res.status(500).json({ error: 'Failed to generate upload credentials' });
   }
 };
@@ -147,7 +149,7 @@ const deleteVideo = async (req, res) => {
 
     await cloudinary.uploader.destroy(video.cloudinaryPublicId, { resource_type: 'video' , invalidate: true });
 
-    res.json({ message: 'Video deleted successfully' });
+    res.status(200).json({ message: 'Video deleted successfully' });
 
   } catch (error) {
     // console.error('Error deleting video:', error);
