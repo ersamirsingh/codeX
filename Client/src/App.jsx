@@ -17,6 +17,12 @@ import HomePage from './Pages/Home';
 import Contest from './Pages/Contest';
 import Subscription from './Pages/Subscription';
 // import Subscription from
+import Profile from './Pages/Profile';
+
+
+
+
+
 
 function App() {
   const dispatch = useDispatch();
@@ -136,13 +142,20 @@ function App() {
           element={isAuthenticated ? <Contest /> : <Navigate to="/login" />}
         ></Route>
         {/* <Route path="/admin/contest/delete" element={isAuthenticated ? <CreateContest/> : <Navigate to="/login" />}></Route>
-                <Route path="/admin/contest/update" element={isAuthenticated ? <UpdateContest/> : <Navigate to="/login" />}></Route>
-                <Route path="/admin/contest/delte" element={isAuthenticated ? <DeleteContest/> : <Navigate to="/login" />}></Route> */}
+            <Route path="/admin/contest/update" element={isAuthenticated ? <UpdateContest/> : <Navigate to="/login" />}></Route>
+            <Route path="/admin/contest/delte" element={isAuthenticated ? <DeleteContest/> : <Navigate to="/login" />}></Route> */}
 
         <Route
           path="/subscription"
           element={
             isAuthenticated ? <Subscription /> : <Navigate to="/login" />
+          }
+        ></Route>
+
+        <Route
+          path="/profile"
+          element={
+            isAuthenticated ? <Profile /> : <Navigate to="/login" />
           }
         ></Route>
       </Routes>
