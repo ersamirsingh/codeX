@@ -119,8 +119,9 @@ export default defineConfig([
     ],
     languageOptions: {
       ecmaVersion: 2020,
-   ...
-```
+    }
+  }
+])
 
 ### Client/index.html
 ```html
@@ -162,7 +163,9 @@ export default defineConfig([
     "cookie-parser": "^1.4.7",
     "daisyui": "^5.0.50",
     "dotenv": "^17.2.2",
-    "express": "^5.1.0",...
+    "express": "^5.1.0",
+  }
+}
 ```
 
 ### Client/src/API/axiosClient.js
