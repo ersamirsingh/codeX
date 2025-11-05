@@ -1,6 +1,7 @@
 import React from 'react';
 import { Plus, Edit, Trash2, Home, RefreshCw, Zap, Video } from 'lucide-react';
 import { NavLink } from 'react-router';
+import Nav from '../Utils/Nav';
 
 
 function Admin() {
@@ -75,6 +76,7 @@ function Admin() {
     
     return (
         <div className="min-h-screen bg-base-200">
+            <Nav />
             <div className="container mx-auto px-4 py-8">
                 {/* Header */}
                 <div className="text-center mb-12">

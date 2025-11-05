@@ -11,6 +11,7 @@ function Problems() {
     const { user } = useSelector((state) => state.auth);
     const [problems, setProblems] = useState([]);
     const [solvedProblems, setSolvedProblems] = useState([]);
+    const [loading, setLoading] = useState(false)
     const [filters, setFilters] = useState({
         difficulty: 'all',
         tag: 'all',
@@ -22,23 +23,33 @@ function Problems() {
         const fetchProblems = async () => {
 
             try {
+                setLoading(true)
                 const { data } = await axiosClient.get('/problem/getAllProblem');
                 setProblems(data);
             }
             catch (error) {
+                setLoading(true)
                 console.error('Error fetching problems:', error);
+            }
+            finally{
+                setLoading(false)
             }
 
         };
 
         const fetchSolvedProblems = async () => {
             try {
+                setLoading(true)
                 const { data } = await axiosClient.get('/problem/problemSolvedByUser');
                 // console.log(data);
                 setSolvedProblems(data);
             } 
             catch (error) {
+                setLoading(true)
                 console.error('Error fetching solved problems:', error);
+            }
+            finally{
+                setLoading(false)
             }
         };
 
@@ -63,6 +74,16 @@ function Problems() {
 
         return difficultyMatch && tagMatch && statusMatch;
     });
+
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-base-100 shadow-lg">
+            <span className="loading loading-spinner loading-lg text-white"></span>
+            </div>
+        );
+    }
+
 
     return (
 
