@@ -17,8 +17,8 @@ const contestRouter = require('./Routes/contestRouter')
 
 //CORS parsing
 app.use(cors({
-  // origin: "https://codex-fronted.onrender.com", // frontend URL
-  origin: "http://localhost:5173",
+  origin: "https://codex-fronted.onrender.com", // frontend URL
+  // origin: "http://localhost:5173",
   credentials: true // allow cookies/auth headers
 }));
 
@@ -49,14 +49,11 @@ const InitalizeConnection = async ()=>{
     // console.log('samir')
     await Promise.all([redisClient.connect(), main()])
     console.log('DB connected successfully')
-    // await main()
-    // console.log('DB connected successfully')
-    // await redisClient.connect()
-    // console.log('Redis connected successfully')
 
         
-    app.listen(process.env.PORT, ()=>{
-      console.log('Listening at port '+process.env.PORT)
+    const PORT = process.env.PORT || 3000
+    app.listen(PORT, ()=>{
+      console.log('Server listening at port', PORT)
     })
 
   } catch (error) {
